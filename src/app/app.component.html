@@ -1,24 +1,5 @@
 <h2>{{title}}</h2>
-<div>total: {{counter}}</div>
-<app-counter [title]="subtitle" (counterEmmit)="setCounter($event)"></app-counter>
 
 
 
-@if (usuarios != undefined && usuarios.length > 0) {
-<table>
-  <thead>
-    <th>id</th>
-    <th>nombre</th>
-  </thead>
-  <tbody>
-    @for (usuario of usuarios; track $index) {
-    <tr>
-      <td>{{$index+1}}</td>
-      <td>{{usuario}}</td>
-    </tr>
-    }
-  </tbody>
-</table>
-} @else {
-<p>No existe registro en sistema</p>
-}
+
