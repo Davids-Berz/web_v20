@@ -1,6 +1,8 @@
 <h2>{{title}}</h2>
+<div>total: {{counter}}</div>
+<app-counter [title]="subtitle" (counterEmmit)="setCounter($event)"></app-counter>
 
-<app-counter [title]="subtitle"></app-counter>
+
 
 @if (usuarios != undefined && usuarios.length > 0) {
 <table>

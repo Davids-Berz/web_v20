@@ -13,13 +13,17 @@ import {CounterComponent} from "./counter/counter.component";
 export class AppComponent implements OnInit {
   title = 'web_v20';
   subtitle: string = 'Contador con estado de session';
+  counter: number = 0;
 
   public usuarios : string[] = ['David', 'Dianey', 'Hilda'];
 
   ngOnInit(): void {
-    setTimeout(() => {
       this.usuarios = [];
-    }, 2000);
+      this.counter = +(sessionStorage.getItem('counter')!) || 0;
+  }
+
+  setCounter(counter : number): void{
+    this.counter = counter;
   }
 
 

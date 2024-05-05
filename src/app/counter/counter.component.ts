@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
 @Component({
   selector: 'app-counter',
@@ -10,12 +10,14 @@ import {Component, Input, OnInit} from '@angular/core';
 export class CounterComponent implements OnInit{
 
   @Input() title: string = '';
+  @Output() counterEmmit: EventEmitter<number> = new EventEmitter<number>();
 
   counter: number = 0;
 
   setCounter() {
     this.counter = this.counter+1;
     sessionStorage.setItem('counter', this.counter.toString());
+    this.counterEmmit.emit(this.counter);
   }
 
   ngOnInit(): void {
