@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-counter',
@@ -7,12 +7,17 @@ import { Component } from '@angular/core';
   templateUrl: './counter.component.html',
   styleUrl: './counter.component.css'
 })
-export class CounterComponent {
+export class CounterComponent implements OnInit{
 
-  counter = 0;
+  counter: number = 0;
 
   setCounter() {
     this.counter = this.counter+1;
+    sessionStorage.setItem('counter', this.counter.toString());
+  }
+
+  ngOnInit(): void {
+    this.counter = +(sessionStorage.getItem('counter')!) || 0;
   }
 
 }
