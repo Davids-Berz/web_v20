@@ -12,7 +12,7 @@ import {CounterComponent} from "./counter/counter.component";
 })
 export class AppComponent implements OnInit {
   title = 'web_v20';
-
+  subtitle: string = 'Contador con estado de session';
 
   public usuarios : string[] = ['David', 'Dianey', 'Hilda'];
 
