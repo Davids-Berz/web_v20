@@ -33,6 +33,7 @@ export const InvoiceData: Invoice = {
       product: 'mouse',
       price: 2.0,
       quantity: 2
-    }]
+    }],
+  total: 0
 
 }
