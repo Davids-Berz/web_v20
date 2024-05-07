@@ -37,7 +37,7 @@ export class InvoiceComponent implements OnInit {
 
   removeItem(id: number) {
     console.log('3 remove InvoiceComponent: ', id);
-    this.invoice.items = this.invoice.items.filter(item => item.id != id);
+    this.invoice = this.invoiceService.remove(id);
   }
 
 
