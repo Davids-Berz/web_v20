@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Invoice} from "../models/invoice";
 import {InvoiceData} from "../data/invoice.data";
+import {Item} from "../models/item";
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,7 @@ export class InvoiceService {
   }
 
   calculateTotal() {
+    console.log('calculate', this.invoice)
     return this.invoice.items.reduce((total, item) =>
       total + (item.price * item.quantity), 0);
   }
@@ -28,5 +30,13 @@ export class InvoiceService {
     const total = this.calculateTotal();
     return {... this.invoice, total};
 
+  }
+
+  save(item: Item): Invoice {
+    console.log('3 service addItem')
+    this.invoice.items = [...this.invoice.items, item];
+    console.log('invoince',this.invoice)
+    const total = this.calculateTotal();
+    return {... this.invoice, total};
   }
 }

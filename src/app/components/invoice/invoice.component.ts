@@ -1,12 +1,13 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {InvoiceService} from "../../services/Invoice.service";
 import {Invoice} from "../../models/invoice";
 import {InvoiceViewComponent} from "../invoice-view/invoice-view.component";
 import {ClientViewComponent} from "../client-view/client-view.component";
 import {ListViewComponent} from "../list-view/list-view.component";
 import {CompanyViewComponent} from "../company-view/company-view.component";
-import {RowItemComponent} from "../row-item/row-item.component";
 import {TotalComponent} from "../total/total.component";
+import {FormItemComponent} from "../form-item/form-item.component";
+import {Item} from "../../models/item";
 
 @Component({
   selector: 'app-invoice',
@@ -16,13 +17,12 @@ import {TotalComponent} from "../total/total.component";
     ClientViewComponent,
     ListViewComponent,
     CompanyViewComponent,
-    TotalComponent],
+    TotalComponent,
+    FormItemComponent],
   templateUrl: './invoice.component.html',
   styles: ``
 })
 export class InvoiceComponent implements OnInit {
-
-  @Output() removeEventEmitter = new EventEmitter();
 
   title: string = 'Invoice';
   invoice!: Invoice;
@@ -31,13 +31,17 @@ export class InvoiceComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.invoice)
     this.invoice = this.invoiceService.getInvoice();
   }
 
   removeItem(id: number) {
     console.log('3 remove InvoiceComponent: ', id);
     this.invoice = this.invoiceService.remove(id);
+  }
+
+  addItem(item: Item) {
+    console.log('2 addItem invoice')
+    this.invoice = this.invoiceService.save(item);
   }
 
 

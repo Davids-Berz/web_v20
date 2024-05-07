@@ -1,0 +1,73 @@
+<div class="my-4 card w-50">
+  <div class="card-header text-bg-secondary">
+
+    <div class="newProduct hstack gap-3" (click)="colapsar()">Nuevo Producto
+      <span class="material-icons ms-auto" style="font-weight: 100;" >
+        @if (colapse) {
+          expand_less
+
+        } @else {
+          expand_more
+        }
+</span>
+    </div>
+  </div>
+  @if (colapse) {
+    <div class="card-body">
+      <form (ngSubmit)="onSubmit(itemForm)" #itemForm="ngForm">
+        <input
+          name="product"
+          placeholder="Producto"
+          class="form-control my-3"
+          [(ngModel)]="item.product"
+          required
+          minlength="4"
+          #product="ngModel">
+
+        @if(product.invalid && (product.dirty || product.touched)) {
+          @if(product.errors!['required']) {
+            <div class="text-danger">Nombre del producto es requerido!</div>
+          }
+        }
+
+        <input
+          name="price"
+          type="number"
+          placeholder="Precio"
+          class="form-control my-3"
+          [(ngModel)]="item.price"
+          required
+          min="4"
+          #price="ngModel">
+
+        @if(price.invalid && (price.dirty || price.touched)) {
+          @if(price.errors!['required']){
+            <div class="text-danger">Precio del producto es requerido!</div>
+          }
+        }
+
+        <input
+          name="quantity"
+          type="number"
+          placeholder="Cantidad"
+          class="form-control my-3"
+          [(ngModel)]="item.quantity"
+          required
+          min="1"
+          #quantity="ngModel">
+
+        @if(quantity.invalid && (quantity.dirty || quantity.touched)) {
+          @if(quantity.errors!['required']){
+            <div class="text-danger">Cantidad del producto es requerido!</div>
+          }
+        }
+
+        <button class="btn btn-primary" [disabled]="itemForm.invalid">Agregar</button>
+      </form>
+    </div>
+  }
+
+
+</div>
+
+
