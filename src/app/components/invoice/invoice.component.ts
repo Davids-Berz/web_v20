@@ -14,8 +14,7 @@ import {RowItemComponent} from "../row-item/row-item.component";
     InvoiceViewComponent,
     ClientViewComponent,
     ListViewComponent,
-    CompanyViewComponent,
-    RowItemComponent],
+    CompanyViewComponent],
   templateUrl: './invoice.component.html',
   styles: ``
 })
