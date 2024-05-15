@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ProductService} from "../../services/product.service";
 import {Product} from "../../models/product";
 import {CatalogoComponent} from "../catalogo/catalogo.component";
@@ -19,13 +19,14 @@ export class CartAppComponent implements OnInit {
 
   products: Product[] = [];
   items: CartItem[] = [];
+  total: number = 0;
 
   constructor(private productService: ProductService) {
   }
 
   ngOnInit() {
     this.products = this.productService.findAll();
-
+    this.calculateTotal();
   }
 
   onAddCart(product: Product) {
@@ -35,19 +36,26 @@ export class CartAppComponent implements OnInit {
       this.items.map(i => {
         if (i.product.id === hasItem.product.id) {
           return {
-            ... i, quantity: i.quantity++
+            ...i, quantity: i.quantity++
           }
         }
-      return i;
+        return i;
       })
     } else {
       /*Mutabilidad en producto  para no pasar la misma instancia, crear otra nueva instancia*/
       this.items = [...this.items, {product: {...product}, quantity: 1}];
     }
+    this.calculateTotal();
   }
 
   onDeleteCart(id: number) {
     this.items = this.items.filter(i => i.product.id != id);
+    this.calculateTotal();
+  }
+
+  calculateTotal() {
+    this.total = this.items.reduce(
+      (acc, i) => acc + (i.product.price * i.quantity), 0);
   }
 
 }
