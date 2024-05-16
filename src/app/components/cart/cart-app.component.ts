@@ -1,16 +1,18 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ProductService} from "../../services/product.service";
 import {Product} from "../../models/product";
 import {CatalogoComponent} from "../catalogo/catalogo.component";
 import {CartComponent} from "./cart.component";
 import {CartItem} from "../../models/cartItem";
+import {NavComponent} from "../nav/nav.component";
 
 @Component({
   selector: 'cart-app',
   standalone: true,
   imports: [
     CatalogoComponent,
-    CartComponent
+    CartComponent,
+    NavComponent
   ],
   templateUrl: './cart-app.component.html',
   styleUrl: './cart-app.component.css'
@@ -20,6 +22,7 @@ export class CartAppComponent implements OnInit {
   products: Product[] = [];
   items: CartItem[] = [];
   total: number = 0;
+  showCart = false;
 
   constructor(private productService: ProductService) {
   }
@@ -64,4 +67,9 @@ export class CartAppComponent implements OnInit {
   saveSession() {
     sessionStorage.setItem('cart', JSON.stringify(this.items))
   }
+
+  openShowCart() {
+    this.showCart = !this.showCart;
+  }
+
 }
