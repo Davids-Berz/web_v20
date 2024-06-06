@@ -35,30 +35,33 @@ export class CartAppComponent implements OnInit {
     this.items = JSON.parse(sessionStorage.getItem('cart')!) || [];
     this.calculateTotal();
     this.onDeleteCart();
+    this.onAddCart();
   }
 
-  onAddCart(product: Product) {
-    const hasItem = this.items.find(i => i.product.id === product.id);
-    console.log(hasItem?.product)
-    if (hasItem) {
-      this.items.map(i => {
-        if (i.product.id === hasItem.product.id) {
-          return {
-            ...i, quantity: i.quantity++
+  onAddCart() {
+    this.sharingDataService.productEventEmitter.subscribe(product => {
+      const hasItem = this.items.find(i => i.product.id === product.id);
+      console.log(hasItem?.product)
+      if (hasItem) {
+        this.items.map(i => {
+          if (i.product.id === hasItem.product.id) {
+            return {
+              ...i, quantity: i.quantity++
+            }
           }
-        }
-        return i;
-      })
-    } else {
-      /*Mutabilidad en producto  para no pasar la misma instancia, crear otra nueva instancia*/
-      this.items = [...this.items, {product: {...product}, quantity: 1}];
-    }
-    this.calculateTotal();
-    this.saveSession();
+          return i;
+        })
+      } else {
+        /*Mutabilidad en producto  para no pasar la misma instancia, crear otra nueva instancia*/
+        this.items = [...this.items, {product: {...product}, quantity: 1}];
+      }
+      this.calculateTotal();
+      this.saveSession();
+    })
   }
 
   onDeleteCart() {
-    this.sharingDataService.IdProductEventEmitter.subscribe(id => {
+    this.sharingDataService.idProductEventEmitter.subscribe(id => {
       this.items = this.items.filter(i => i.product.id != id);
       if (this.items.length == 0) {
         sessionStorage.removeItem('cart');

@@ -22,6 +22,6 @@ export class CartComponent {
   }
 
   onDeleteCart(id: number) {
-    this.sharingDataService.IdProductEventEmitter.emit(id);
+    this.sharingDataService.idProductEventEmitter.emit(id);
   }
 }
