@@ -1,10 +1,9 @@
-<app-nav [items]="items" [total]="total"/>
+<app-nav [items]="items"
+         [total]="total"
+         [products]="products" />
 <div class="container">
-  <h2>Catalogo de productos App</h2>
   <div class="row">
-    <div>
-      <catalogo [products]="products" (productEventEmitter)="onAddCart($event)"/>
-    </div>
+
 
     <router-outlet></router-outlet>
   </div>
