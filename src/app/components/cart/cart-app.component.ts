@@ -6,6 +6,7 @@ import {CartComponent} from "./cart.component";
 import {CartItem} from "../../models/cartItem";
 import {NavComponent} from "../nav/nav.component";
 import {RouterOutlet} from "@angular/router";
+import {SharingDataService} from "../../services/sharing-data.service";
 
 @Component({
   selector: 'cart-app',
@@ -25,13 +26,15 @@ export class CartAppComponent implements OnInit {
   items: CartItem[] = [];
   total: number = 0;
 
-  constructor(private productService: ProductService) {
+  constructor(private productService: ProductService,
+              private sharingDataService: SharingDataService) {
   }
 
   ngOnInit() {
     this.products = this.productService.findAll();
     this.items = JSON.parse(sessionStorage.getItem('cart')!) || [];
     this.calculateTotal();
+    this.onDeleteCart();
   }
 
   onAddCart(product: Product) {
@@ -54,10 +57,17 @@ export class CartAppComponent implements OnInit {
     this.saveSession();
   }
 
-  onDeleteCart(id: number) {
-    this.items = this.items.filter(i => i.product.id != id);
-    this.calculateTotal();
-    this.saveSession();
+  onDeleteCart() {
+    this.sharingDataService.IdProductEventEmitter.subscribe(id => {
+      this.items = this.items.filter(i => i.product.id != id);
+      if (this.items.length == 0) {
+        sessionStorage.removeItem('cart');
+        sessionStorage.clear();
+      }
+      this.calculateTotal();
+      this.saveSession();
+    })
+
   }
 
   calculateTotal() {
