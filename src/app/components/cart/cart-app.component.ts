@@ -5,6 +5,7 @@ import {CatalogoComponent} from "../catalogo/catalogo.component";
 import {CartComponent} from "./cart.component";
 import {CartItem} from "../../models/cartItem";
 import {NavComponent} from "../nav/nav.component";
+import {RouterOutlet} from "@angular/router";
 
 @Component({
   selector: 'cart-app',
@@ -12,7 +13,8 @@ import {NavComponent} from "../nav/nav.component";
   imports: [
     CatalogoComponent,
     CartComponent,
-    NavComponent
+    NavComponent,
+    RouterOutlet
   ],
   templateUrl: './cart-app.component.html',
   styleUrl: './cart-app.component.css'
