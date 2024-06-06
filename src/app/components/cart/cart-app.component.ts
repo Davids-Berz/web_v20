@@ -1,11 +1,11 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ProductService} from "../../services/product.service";
 import {Product} from "../../models/product";
 import {CatalogoComponent} from "../catalogo/catalogo.component";
 import {CartComponent} from "./cart.component";
 import {CartItem} from "../../models/cartItem";
 import {NavComponent} from "../nav/nav.component";
-import {RouterOutlet} from "@angular/router";
+import {Router, RouterOutlet} from "@angular/router";
 import {SharingDataService} from "../../services/sharing-data.service";
 
 @Component({
@@ -26,7 +26,8 @@ export class CartAppComponent implements OnInit {
   items: CartItem[] = [];
   total: number = 0;
 
-  constructor(private productService: ProductService,
+  constructor(private router: Router,
+              private productService: ProductService,
               private sharingDataService: SharingDataService) {
   }
 
@@ -57,6 +58,8 @@ export class CartAppComponent implements OnInit {
       }
       this.calculateTotal();
       this.saveSession();
+      this.router.navigate(['/cart'],
+        {state: {items: this.items, total: this.total}})
     })
   }
 
@@ -69,6 +72,11 @@ export class CartAppComponent implements OnInit {
       }
       this.calculateTotal();
       this.saveSession();
+      this.router.navigateByUrl('/', {skipLocationChange: true})
+        .then(() => {
+          this.router.navigate(['/cart'],
+            {state: {items: this.items, total: this.total}})
+        })
     })
 
   }
