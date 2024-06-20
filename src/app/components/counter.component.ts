@@ -23,7 +23,7 @@ export class CounterComponent implements OnInit {
 
 
   increment(): void {
-    this.store.dispatch(increment())
+    this.store.dispatch(increment({add: 3}))
     console.log('incrementando')
   }
 
