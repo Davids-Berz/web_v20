@@ -7,6 +7,9 @@ import {CartItem} from "../../models/cartItem";
 import {NavComponent} from "../nav/nav.component";
 import {Router, RouterOutlet} from "@angular/router";
 import {SharingDataService} from "../../services/sharing-data.service";
+import {ItemsState} from "../store/item.reducer";
+import {Store} from "@ngrx/store";
+import {add, remove, total} from "../store/item.action";
 
 @Component({
   selector: 'cart-app',
@@ -26,37 +29,29 @@ export class CartAppComponent implements OnInit {
   items: CartItem[] = [];
   total: number = 0;
 
-  constructor(private router: Router,
+  constructor(private store: Store<{ items: ItemsState }>,
               private productService: ProductService,
-              private sharingDataService: SharingDataService) {
+              private sharingDataService: SharingDataService,
+              private router: Router) {
+    this.store.select('items').subscribe((state: ItemsState) => {
+      this.items = [...state.items];
+      this.total = state.total;
+    })
   }
 
   ngOnInit() {
     this.products = this.productService.findAll();
-    this.items = JSON.parse(sessionStorage.getItem('cart')!) || [];
-    this.calculateTotal();
+    //this.items = JSON.parse(sessionStorage.getItem('cart')!) || [];
     this.onDeleteCart();
     this.onAddCart();
+    this.store.dispatch(total());
+
   }
 
   onAddCart() {
     this.sharingDataService.productEventEmitter.subscribe(product => {
-      const hasItem = this.items.find(i => i.product.id === product.id);
-      console.log(hasItem?.product)
-      if (hasItem) {
-        this.items.map(i => {
-          if (i.product.id === hasItem.product.id) {
-            return {
-              ...i, quantity: i.quantity++
-            }
-          }
-          return i;
-        })
-      } else {
-        /*Mutabilidad en producto  para no pasar la misma instancia, crear otra nueva instancia*/
-        this.items = [...this.items, {product: {...product}, quantity: 1}];
-      }
-      this.calculateTotal();
+      this.store.dispatch(add({product}));
+      this.store.dispatch(total());
       this.saveSession();
       this.router.navigate(['/cart'],
         {state: {items: this.items, total: this.total}})
@@ -65,12 +60,8 @@ export class CartAppComponent implements OnInit {
 
   onDeleteCart() {
     this.sharingDataService.idProductEventEmitter.subscribe(id => {
-      this.items = this.items.filter(i => i.product.id != id);
-      if (this.items.length == 0) {
-        sessionStorage.removeItem('cart');
-        sessionStorage.clear();
-      }
-      this.calculateTotal();
+      this.store.dispatch(remove({id}));
+      this.store.dispatch(total())
       this.saveSession();
       this.router.navigateByUrl('/', {skipLocationChange: true})
         .then(() => {
@@ -81,13 +72,7 @@ export class CartAppComponent implements OnInit {
 
   }
 
-  calculateTotal() {
-    this.total = this.items.reduce(
-      (acc, i) => acc + (i.product.price * i.quantity), 0);
-  }
-
   saveSession() {
     sessionStorage.setItem('cart', JSON.stringify(this.items))
   }
-
 }
