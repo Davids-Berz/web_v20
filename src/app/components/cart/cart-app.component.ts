@@ -36,6 +36,8 @@ export class CartAppComponent implements OnInit {
     this.store.select('items').subscribe((state: ItemsState) => {
       this.items = [...state.items];
       this.total = state.total;
+      this.saveSession();
+      console.log('cambio de estado');
     })
   }
 
@@ -44,7 +46,7 @@ export class CartAppComponent implements OnInit {
     //this.items = JSON.parse(sessionStorage.getItem('cart')!) || [];
     this.onDeleteCart();
     this.onAddCart();
-    this.store.dispatch(total());
+    // this.store.dispatch(total());
 
   }
 
@@ -52,7 +54,6 @@ export class CartAppComponent implements OnInit {
     this.sharingDataService.productEventEmitter.subscribe(product => {
       this.store.dispatch(add({product}));
       this.store.dispatch(total());
-      this.saveSession();
       this.router.navigate(['/cart'],
         {state: {items: this.items, total: this.total}})
     })
@@ -62,7 +63,6 @@ export class CartAppComponent implements OnInit {
     this.sharingDataService.idProductEventEmitter.subscribe(id => {
       this.store.dispatch(remove({id}));
       this.store.dispatch(total())
-      this.saveSession();
       this.router.navigateByUrl('/', {skipLocationChange: true})
         .then(() => {
           this.router.navigate(['/cart'],
